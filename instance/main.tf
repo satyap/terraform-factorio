@@ -129,6 +129,7 @@ ENV
       "sudo install -m 644 -o root -g root /tmp/conf/factorio-headless.service /etc/systemd/system",
       "sudo install -m 644 -o root -g root /tmp/conf/factorio-backup.service /etc/systemd/system",
       "sudo install -m 644 -o root -g root /tmp/conf/factorio-restore.service /etc/systemd/system",
+      "sudo install -m 644 -o root -g root /tmp/conf/factorio-mods.service /etc/systemd/system",
       "sudo systemctl daemon-reload",
     ]
   }
@@ -153,7 +154,8 @@ resource "null_resource" "provision" {
     inline = [
       "set -e",
       "sudo cloud-init status --wait > /dev/null 2>&1",
-      "sudo systemctl start factorio-restore.service && sudo systemctl start factorio-headless.service",
+      "sudo systemctl start factorio-restore.service && sudo systemctl start factorio-mods.service",
+      "sudo systemctl start factorio-headless.service",
     ]
   }
 
