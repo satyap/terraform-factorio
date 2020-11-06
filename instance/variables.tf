@@ -47,5 +47,5 @@ variable "factorio_save_game" {
 }
 
 variable "game_password" {
-  type = "string"
+  type = string
 }

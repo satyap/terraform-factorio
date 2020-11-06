@@ -1,6 +1,7 @@
 provider "aws" {
   region  = var.region
   version = "~> 2.13"
+  profile = "factorio"
 }
 
 provider "template" {

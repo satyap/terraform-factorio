@@ -14,39 +14,8 @@ variable "region" {
 }
 
 resource "aws_iam_policy" "factorio" {
-  name = "factorio-tf"
-
-  policy = <<POLICY
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": "ec2:*",
-            "Resource": "*",
-            "Condition": {
-                "StringEquals": {
-                    "aws:ResourceTag/Project": "factorio"
-                }
-            }
-        },
-        {
-            "Sid": "VisualEditor2",
-            "Effect": "Allow",
-            "Action": [
-                "iam:*",
-                "s3:*"
-            ],
-            "Resource": [
-                "arn:aws:iam::*:instance-profile/factorio-instance-profile",
-                "arn:aws:iam::*:role/factorio-iam-role-backup",
-                "arn:aws:iam::*:policy/factorio-iam-role-policy-backup",
-                "arn:aws:s3:::factorio*"
-            ]
-        }
-    ]
-}
-POLICY
+  name   = "factorio-tf"
+  policy = file("factorio-policy.json")
 }
 
 resource "aws_iam_role" "factorio" {

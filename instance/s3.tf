@@ -93,7 +93,7 @@ resource "aws_iam_role" "backup" {
       "Principal": {
         "Service": "ec2.amazonaws.com"
       },
-      "Effect": "Allow",
+      "Effect": "Allow"
     }
   ]
 }
