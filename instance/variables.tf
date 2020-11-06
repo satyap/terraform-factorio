@@ -34,13 +34,6 @@ variable "instance_profile" {
   description = "Instance profile to assign to AWS instance. This should be configured to allow access to the S3 backup bucket."
 }
 
-variable "tags" {
-  type = map(string)
-  default = {
-    "Project" : "factorio"
-  }
-}
-
 variable "factorio_version" {
   type        = string
   default     = "latest"

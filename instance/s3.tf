@@ -1,12 +1,3 @@
-terraform {
-  required_version = ">= 0.12"
-}
-
-provider "aws" {
-  region  = var.region
-  version = "~> 2.13"
-}
-
 resource "aws_s3_bucket" "backup" {
   bucket_prefix = var.bucket_prefix
   acl           = "private"
