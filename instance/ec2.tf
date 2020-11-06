@@ -59,6 +59,7 @@ resource "aws_instance" "factorio" {
 
   provisioner "file" {
     content     = <<ENV
+GAME_PASSWORD=${var.game_password}
 S3_BUCKET=${aws_s3_bucket.backup.bucket}
 SAVE_GAME_ARG=${local.save_game_arg}
 ENV

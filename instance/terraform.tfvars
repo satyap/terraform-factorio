@@ -6,5 +6,4 @@ factorio_version = "latest"
 # Factorio server instance: NVMe instance
 #instance_type = "c5.large"
 
-# S3 bucket for save games. Use bucket name from state module.
-bucket_name = "factorio-123"
+game_password = ""

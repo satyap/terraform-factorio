@@ -24,7 +24,7 @@ variable "instance_type" {
 }
 
 variable "bucket_prefix" {
-  default = "factorio-"
+  default     = "factorio-"
   description = "S3 bucket prefix to use for save game backups."
 }
 
@@ -51,4 +51,8 @@ variable "factorio_save_game" {
   type        = string
   default     = ""
   description = "Name of the Factorio save game to load. Leave empty to load latest save game."
+}
+
+variable "game_password" {
+  type = "string"
 }
