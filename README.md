@@ -43,7 +43,7 @@ are restored onto the instance.
 Destroy infrastructure after use:
 
     cd instance/
-    terraform destroy
+    terraform destroy -target=aws_instance.factorio
 
 This will automatically backup the save games to the specified S3 bucket.
 
