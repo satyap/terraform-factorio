@@ -63,31 +63,6 @@ resource "aws_key_pair" "key" {
 resource "aws_default_vpc" "default" {
 }
 
-resource "aws_security_group" "instance" {
-  vpc_id = aws_default_vpc.default.id
-  name   = "${var.name}-security-group"
-  tags   = var.tags
-
-  ingress {
-    protocol    = "tcp"
-    from_port   = 22
-    to_port     = 22
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  ingress {
-    protocol    = "udp"
-    from_port   = 34197
-    to_port     = 34197
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-}
-
 resource "aws_instance" "factorio" {
   ami                         = data.aws_ami.ubuntu.id
   instance_type               = var.instance_type
@@ -130,45 +105,5 @@ ENV
       "sudo install -m 644 -o root -g root /tmp/conf/factorio-restore.service /etc/systemd/system",
       "sudo systemctl daemon-reload",
     ]
-  }
-
-  connection {
-    host        = self.public_ip
-    type        = "ssh"
-    user        = "ubuntu"
-    private_key = tls_private_key.ssh.private_key_pem
-  }
-}
-
-resource "null_resource" "provision" {
-  triggers = {
-    instance_id = aws_instance.factorio.id
-    instance_ip = aws_instance.factorio.public_ip
-    private_key = tls_private_key.ssh.private_key_pem
-  }
-
-  # Restore save games from S3 and start headless server.
-  provisioner "remote-exec" {
-    inline = [
-      "set -e",
-      "sudo cloud-init status --wait > /dev/null 2>&1",
-      "sudo systemctl start factorio-restore.service && sudo systemctl start factorio-headless.service",
-    ]
-  }
-
-  # Stop headless server and backup save games to S3 on destroy.
-  provisioner "remote-exec" {
-    when = destroy
-    inline = [
-      "sudo systemctl stop factorio-headless.service",
-      "sudo systemctl start factorio-backup.service",
-    ]
-  }
-
-  connection {
-    host        = self.triggers.instance_ip
-    type        = "ssh"
-    user        = "ubuntu"
-    private_key = self.triggers.private_key
   }
 }
