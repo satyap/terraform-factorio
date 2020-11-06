@@ -23,15 +23,22 @@ variable "instance_type" {
   description = "AWS instance type to use for the Factorio server."
 }
 
-variable "bucket_name" {
-  type        = string
-  description = "S3 bucket to use for save game backups."
+variable "bucket_prefix" {
+  default = "factorio-"
+  description = "S3 bucket prefix to use for save game backups."
 }
 
 variable "instance_profile" {
   type        = string
   default     = "factorio-instance-profile"
   description = "Instance profile to assign to AWS instance. This should be configured to allow access to the S3 backup bucket."
+}
+
+variable "tags" {
+  type = map(string)
+  default = {
+    "Project" : "factorio"
+  }
 }
 
 variable "factorio_version" {

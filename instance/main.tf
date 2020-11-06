@@ -75,7 +75,7 @@ resource "aws_instance" "factorio" {
     delete_on_termination = true
   }
 
-  iam_instance_profile = var.instance_profile
+  iam_instance_profile = aws_iam_instance_profile.backup.id
 
   key_name        = aws_key_pair.key.key_name
   user_data       = data.template_file.cloud_config.rendered
@@ -88,7 +88,7 @@ resource "aws_instance" "factorio" {
 
   provisioner "file" {
     content     = <<ENV
-S3_BUCKET=${var.bucket_name}
+S3_BUCKET=${aws_s3_bucket.backup.bucket}
 SAVE_GAME_ARG=${local.save_game_arg}
 ENV
     destination = "/tmp/factorio-environment"

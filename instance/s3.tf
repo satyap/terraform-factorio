@@ -82,7 +82,7 @@ resource "aws_iam_policy" "backup" {
       "Effect": "Allow",
       "Resource": [
         "${aws_s3_bucket.backup.arn}",
-        "${aws_s3_bucket.backup.arn}/*"
+        "${aws_s3_bucket.backup.arn}/saves/*"
       ]
     }
   ]
@@ -103,7 +103,6 @@ resource "aws_iam_role" "backup" {
         "Service": "ec2.amazonaws.com"
       },
       "Effect": "Allow",
-      "Sid": ""
     }
   ]
 }
