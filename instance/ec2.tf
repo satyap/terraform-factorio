@@ -22,16 +22,26 @@ data "template_file" "cloud_config" {
   }
 }
 
-resource "tls_private_key" "ssh" {
-  algorithm = "RSA"
-}
-
-resource "aws_key_pair" "key" {
-  key_name   = var.name
-  public_key = tls_private_key.ssh.public_key_openssh
-}
-
 resource "aws_default_vpc" "default" {
+}
+
+resource "aws_security_group" "factorio" {
+  vpc_id = aws_default_vpc.default.id
+  name   = "${var.name}-security-group"
+  tags   = var.tags
+
+  ingress {
+    protocol    = "udp"
+    from_port   = 34197
+    to_port     = 34197
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 }
 
 resource "aws_instance" "factorio" {
@@ -48,9 +58,8 @@ resource "aws_instance" "factorio" {
 
   iam_instance_profile = aws_iam_instance_profile.backup.id
 
-  key_name        = aws_key_pair.key.key_name
   user_data       = data.template_file.cloud_config.rendered
-  security_groups = [aws_security_group.instance.name]
+  security_groups = [aws_security_group.factorio.name]
 
   provisioner "file" {
     source      = "conf"
