@@ -15,30 +15,20 @@ backups to S3.
 * Put AWS credentials in `~/.aws/credentials` (`aws_access_key_id` and
   `aws_secret_access_key`)
 
-* Configure and create stateful infrastructure:
+* Create the resources under `bootstrap`. These are a role and policy in order for the rest of terraform to work.
 
-      cd state/
-      terraform init && terraform apply
-      terraform output
-      
-      # Take note of bucket name in output
-      bucket_name = factorio-20190602222917314000000001
-
-* Configure stateless infrastructure:
+* Configure infrastructure:
 
       cd instance/
       terraform init
     
-      # Add correct bucket_name from above
-      vim terraform.tfvars
-
 * Configure Factorio server (see [Setting up a Linux Factorio server](https://wiki.factorio.com/Multiplayer#Setting_up_a_Linux_Factorio_server)):
 
       vim conf/server-settings.json
 
 ### Game server
 
-Create stateless infrastructure:
+Create infrastructure:
 
     cd instance/
     terraform apply
@@ -57,14 +47,6 @@ Destroy infrastructure after use:
 
 This will automatically backup the save games to the specified S3 bucket.
 
-## Details
-
-* `state/` contains the Terraform module for the stateful server infrastructure.
-  This includes the S3 bucket holding game state inbetween games, i.e. while the
-  server instance does not exist.
-* `instance/` contains the Terraform module for the stateless server
-  infrastructure. This includes the EC2 instance that runs the game server.
-
 ### Services
 
 Several systemd services are provisioned to the server instance:
@@ -72,8 +54,6 @@ Several systemd services are provisioned to the server instance:
 * `factorio-headless.service`: Service to start/stop the headless game server.
 * `factorio-restore.service`: One shot service that restores save games from S3.
 * `factorio-backup.service`: One shot service that backs up save games to S3.
-
-You can use the `connect.sh` script to connect to the game server via SSH.
 
 ### Limitations
 
