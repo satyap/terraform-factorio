@@ -1,17 +1,16 @@
-data "aws_ami" "ubuntu" {
-  most_recent = true
+data "aws_ami" "managed" {
+  filter {
+    name   = "state"
+    values = ["available"]
+  }
 
   filter {
     name   = "name"
-    values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"]
+    values = ["amzn2-ami-hvm-2.0.20200304.?-x86_64-gp2"]
   }
 
-  filter {
-    name   = "virtualization-type"
-    values = ["hvm"]
-  }
-
-  owners = ["099720109477"] # Canonical
+  most_recent = true
+  owners      = ["amazon"]
 }
 
 data "template_file" "cloud_config" {
@@ -45,7 +44,7 @@ resource "aws_security_group" "factorio" {
 }
 
 resource "aws_instance" "factorio" {
-  ami                         = data.aws_ami.ubuntu.id
+  ami                         = data.aws_ami.managed.id
   instance_type               = var.instance_type
   associate_public_ip_address = true
   tags                        = var.tags
