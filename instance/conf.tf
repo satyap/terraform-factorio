@@ -8,7 +8,7 @@ data "template_file" "server-settings" {
 
 resource "local_file" "server-settings" {
   content  = data.template_file.server-settings.rendered
-  filename = "${path.module}/build/conf/server-settings-template.json"
+  filename = "${path.module}/build/conf/server-settings.json"
 }
 
 # Copy other files
@@ -19,6 +19,7 @@ resource "local_file" "conf_files" {
     "factorio-backup.service",
     "factorio-headless.service",
     "factorio-restore.service",
+    "install.bash",
     "server-adminlist.json",
   ])
 }

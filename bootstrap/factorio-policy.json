@@ -3,6 +3,13 @@
     "Statement": [
         {
             "Action": [
+                "ssm:StartSession"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+        {
+            "Action": [
                 "ec2:StartInstances",
                 "ec2:StopInstances",
                 "ec2:TerminateInstances"
@@ -57,6 +64,7 @@
             ],
             "Effect": "Allow",
             "Resource": [
+                "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
                 "arn:aws:iam::*:instance-profile/factorio-instance-profile",
                 "arn:aws:iam::*:policy/factorio-iam-role-policy-backup",
                 "arn:aws:iam::*:role/factorio-iam-role-backup"

@@ -12,6 +12,13 @@ resource "aws_iam_policy" "backup" {
         "${aws_s3_bucket.backup.arn}",
         "${aws_s3_bucket.backup.arn}/saves/*"
       ]
+    },
+    {
+      "Action": "s3:Get*",
+      "Effect": "Allow",
+      "Resource": [
+        "${aws_s3_bucket.backup.arn}/conf/*"
+      ]
     }
   ]
 }
@@ -37,9 +44,18 @@ resource "aws_iam_role" "backup" {
 POLICY
 }
 
+data "aws_iam_policy" "managed" {
+  arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
 resource "aws_iam_role_policy_attachment" "backup" {
   role       = aws_iam_role.backup.name
   policy_arn = aws_iam_policy.backup.arn
+}
+
+resource "aws_iam_role_policy_attachment" "managed" {
+  role       = aws_iam_role.backup.name
+  policy_arn = data.aws_iam_policy.managed.arn
 }
 
 resource "aws_iam_instance_profile" "backup" {
