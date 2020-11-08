@@ -13,39 +13,37 @@ backups to S3.
 ### Initial setup
 
 * Put AWS credentials in `~/.aws/credentials` (`aws_access_key_id` and
-  `aws_secret_access_key`)
+  `aws_secret_access_key`).
 
-* Create the resources under `bootstrap`. These are a role and policy in order for the rest of terraform to work.
+* Create the resources under `bootstrap`. These are a role and policy in order for the rest of terraform to work, and you can use this profile for all other actions with the factorio service.
+
+* In ~/.aws/config, set up a profile `factorio`, which should be pointed at a role that uses the policy inside `bootstrap/`:
+
+```
+[profile factorio]
+region = us-east-1
+role_arn=arn:aws:iam::YOURACCOUNT_HERE:role/factorio-tf
+source_profile=default
+```
 
 * Configure infrastructure:
 
-      cd instance/
-      terraform init
+```
+cd instance/
+terraform init
+terraform apply
+terraform output
+```
     
 * Configure Factorio server (see [Setting up a Linux Factorio server](https://wiki.factorio.com/Multiplayer#Setting_up_a_Linux_Factorio_server)):
 
-      vim conf/server-settings.json
+      vim conf/server-settings-template.json
 
-### Game server
+* Connect to the instance:
 
-Create infrastructure:
-
-    cd instance/
-    terraform apply
-    terraform output
-    
-    # Public IP of the game server
-    ip = 3.121.142.76
-
-The game server is automatically started and the most recent save games from S3
-are restored onto the instance.
-
-Destroy infrastructure after use:
-
-    cd instance/
-    terraform destroy -target=aws_instance.factorio
-
-This will automatically backup the save games to the specified S3 bucket.
+```
+aws ssm start-session --target i-INSTANCEID --profile=factorio --document-name CustomCommandSessionDocument
+```
 
 ### Services
 
