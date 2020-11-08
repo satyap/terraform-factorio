@@ -2,3 +2,6 @@
 *.tfstate
 *.tfstate.backup
 id_factorio
+
+instance/build/conf/?*.*
+instance/build/conf.zip

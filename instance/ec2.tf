@@ -60,20 +60,6 @@ resource "aws_instance" "factorio" {
   user_data       = data.template_file.cloud_config.rendered
   security_groups = [aws_security_group.factorio.name]
 
-  provisioner "file" {
-    source      = "conf"
-    destination = "/tmp"
-  }
-
-  provisioner "file" {
-    content     = <<ENV
-GAME_PASSWORD=${var.game_password}
-S3_BUCKET=${aws_s3_bucket.backup.bucket}
-SAVE_GAME_ARG=${local.save_game_arg}
-ENV
-    destination = "/tmp/factorio-environment"
-  }
-
   # Initialise Factorio server settings, install systemd units.
   provisioner "remote-exec" {
     inline = [

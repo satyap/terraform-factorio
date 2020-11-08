@@ -18,6 +18,17 @@ resource "aws_s3_bucket" "backup" {
     }
   }
 
+  lifecycle_rule {
+    id      = "conf"
+    enabled = true
+
+    prefix = "conf/"
+
+    noncurrent_version_expiration {
+      days = 1
+    }
+  }
+
   lifecycle {
     prevent_destroy = true
   }
