@@ -1,8 +1,10 @@
 locals {
-  # To load named save game: --start-server ${path}/${name}.zip
-  # To load latest save game: --start-server-load-latest
-  save_game_arg = (var.factorio_save_game != "" ?
-    "--start-server ${var.factorio_save_game}.zip'" :
-  "--start-server-load-latest")
+  conf_files = toset([
+    "factorio-backup.service",
+    "factorio-headless.service",
+    "factorio-restore.service",
+    "install.bash",
+    "server-adminlist.json",
+    "server-settings.json",
+  ])
 }
-

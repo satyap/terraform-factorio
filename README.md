@@ -26,6 +26,10 @@ role_arn=arn:aws:iam::YOURACCOUNT_HERE:role/factorio-tf
 source_profile=default
 ```
 
+* Configure Factorio server (see [Setting up a Linux Factorio server](https://wiki.factorio.com/Multiplayer#Setting_up_a_Linux_Factorio_server)):
+
+      vim conf/server-settings-template.json
+
 * Configure infrastructure:
 
 ```
@@ -35,14 +39,14 @@ terraform apply
 terraform output
 ```
     
-* Configure Factorio server (see [Setting up a Linux Factorio server](https://wiki.factorio.com/Multiplayer#Setting_up_a_Linux_Factorio_server)):
+* Connect to the instance using AWS SSM
 
-      vim conf/server-settings-template.json
-
-* Connect to the instance:
+* Commands available:
 
 ```
-aws ssm start-session --target i-INSTANCEID --profile=factorio --document-name CustomCommandSessionDocument
+sudo service factorio-restore
+sudo service factorio-headless
+sudo service factorio-backup
 ```
 
 ### Services

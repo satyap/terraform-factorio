@@ -3,7 +3,6 @@ Description=Factorio Backup
 After=cloud-final.service
 
 [Service]
-EnvironmentFile=/etc/factorio/factorio-environment
 ExecStart=/usr/bin/aws s3 sync . s3://${S3_BUCKET}/saves
 WorkingDirectory=/opt/factorio/saves
 Restart=no
